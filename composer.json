@@ -1,0 +1,38 @@
+{
+    "name": "chess/laravel-chatkit-api",
+    "description": "Laravel wrapper for the pusher chatkit api",
+    "license": "MIT",
+    "keywords": ["laravel", "pusher", "chatkit", "api"],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Pascal Boucher",
+            "email": "pascalboocher@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.3",
+        "ext-fileinfo": "*",
+        "illuminate/support": "^5.6",
+        "guzzlehttp/guzzle": "^6.3",
+        "pusher/pusher-chatkit-server": "^0.5.0",
+        "illuminate/cache": "^5.6",
+        "illuminate/filesystem": "^5.6",
+        "kevinrob/guzzle-cache-middleware": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chess\\Chatkit\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Chess\\Chatkit\\ChatkitServiceProvider"
+            ],
+            "aliases": {
+                "Chatkit": "Chess\\Chatkit\\Facades\\Chatkit"
+            }
+        }
+    }
+}
