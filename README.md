@@ -16,13 +16,13 @@ For Laravel versions before 5.5, you must register the service provider in your 
 
 1) Add a new item to the providers array:
 
-    ```php
+    ```
     Chess\Chatkit\ChatkitServiceProvider::class,
     ```
 
 2) Add a new item to the aliases array:
 
-    ```php
+    ```
     'Chatkit' => Chess\Chatkit\Facades\Chatkit::class,
     ```
 
