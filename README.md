@@ -26,15 +26,9 @@ For Laravel versions before 5.5, you must register the service provider in your 
     'Chatkit' => Chess\Chatkit\Facades\Chatkit::class,
     ```
 
-## Usage
+## Documentation
 
-Include the Facade class at the top of your file
-
-```
-use Chatkit;
-```
-
-The rest of the documentation can be found in the project's wiki section.
+The documentation can be found in the project's wiki section.
 
 [Documentation](https://github.com/pascalboucher/laravel-chatkit-api/wiki)
 
