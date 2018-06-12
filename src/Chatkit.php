@@ -59,6 +59,45 @@ class Chatkit
     }
 
     /**
+     * Get the sudo token credentials.
+     *
+     * @param  string $userId
+     * @return array
+     * @throws \Chatkit\Exceptions\MissingArgumentException
+     * @throws \Exception
+     */
+    public function getSudoToken($userId = ''): array
+    {
+        return $this->getToken($userId, true);
+    }
+
+    /**
+     * Get the token credentials.
+     *
+     * @param  string $userId
+     * @param  bool $sudo
+     * @return array
+     * @throws \Chatkit\Exceptions\MissingArgumentException
+     * @throws \Exception
+     */
+    public function getToken($userId = '', $sudo = false): array
+    {
+        if (!$userId) {
+            throw new \Exception('User id is required.');
+        }
+
+        $chatkit = new ChatkitSDK([
+            'instance_locator' => $this->config['instance_locator'],
+            'key' => $this->config['key']
+        ]);
+
+        return $chatkit->authenticate([
+            'su' => $sudo,
+            'user_id' => $userId
+        ])['body'];
+    }
+
+    /**
      * Set the cache store.
      *
      * @param  \Illuminate\Cache\Repository $cache
@@ -102,6 +141,8 @@ class Chatkit
         $this->api['userId'] = $userId;
 
         $this->api['sudo'] = $sudo;
+
+        $this->httpClient = null;
 
         return $this;
     }
@@ -153,30 +194,6 @@ class Chatkit
     }
 
     /**
-     * Get the token credentials.
-     *
-     * @return void
-     * @throws \Chatkit\Exceptions\MissingArgumentException
-     * @throws \Exception
-     */
-    public function generateToken(): void
-    {
-        if (!array_key_exists('userId', $this->api) || !array_key_exists('sudo', $this->api)) {
-            throw new \Exception('Api settings not set');
-        }
-
-        $chatkit = new ChatkitSDK([
-            'instance_locator' => $this->config['instance_locator'],
-            'key' => $this->config['key']
-        ]);
-
-        $this->api['token'] = $chatkit->authenticate([
-            'su' => $this->api['sudo'],
-            'user_id' => $this->api['userId']
-        ])['body']['access_token'];
-    }
-
-    /**
      * Get the Http Client.
      *
      * @return \GuzzleHttp\Client
@@ -187,7 +204,11 @@ class Chatkit
     {
         if (is_null($this->httpClient)) {
 
-            $this->generateToken();
+            if (!array_key_exists('userId', $this->api) || !array_key_exists('sudo', $this->api)) {
+                throw new \Exception('Api settings not set');
+            }
+
+            $this->api['token'] = $this->getToken($this->api['userId'], $this->api['sudo'])['access_token'];
 
             $this->httpClient =  new Client([
                 'base_uri' => Chatkit::BASE_URI,
