@@ -8,7 +8,6 @@ use GuzzleHttp\Psr7\Request;
 use Illuminate\Cache\FileStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Log;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Storage\LaravelCacheStorage;
 use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
@@ -45,8 +44,6 @@ class ClientMiddlewares
      */
     public static function setBaseHeaders($token)
     {
-        Log::info($token);
-
         return Middleware::mapRequest(
             function (Request $request) use ($token) {
                 return $request->withHeader('Accept', 'application/json')
